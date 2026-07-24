@@ -76,6 +76,43 @@
             padding: 14px;
             color: #b0b8d4;
         }
+
+        .ppt-viewer {
+            margin-top: 28px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.06);
+        }
+
+        .ppt-viewer iframe {
+            width: 100%;
+            height: min(75vh, 800px);
+            border: 0;
+            display: block;
+        }
+
+        .actions {
+            margin-top: 16px;
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            color: white;
+            background: #00d2ff;
+        }
+
+        .btn.secondary {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
     </style>
 </head>
 <body>
@@ -83,6 +120,8 @@
         <a class="back" href="index.html#work" id="backLink">← Back to Projects</a>
         <h1 id="projectTitle">Project Gallery</h1>
         <p id="projectDesc">Project photos and files.</p>
+
+        <div id="viewerWrap"></div>
 
         <div class="gallery">
             <div class="photo">
@@ -107,21 +146,39 @@
         const data = {
             bumper: {
                 title: 'Automotive Front Bumper Fascia',
-                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.'
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
+                ppt: 'ppt/bumper.pptx',
+                slidesUrl: 'https://docs.google.com/gview?url=https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/ppt/bumper.pptx&embedded=true'
             },
             automotive: {
                 title: 'High-Performance Automotive Modeling',
-                desc: 'Advanced surfacing and 3D geometric modeling for vehicle components and body panels.'
+                desc: 'Advanced surfacing and 3D geometric modeling for vehicle components and body panels.',
+                ppt: 'ppt/automotive.pptx',
+                slidesUrl: 'https://docs.google.com/gview?url=https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/ppt/automotive.pptx&embedded=true'
             },
             thermal: {
                 title: 'Thermal Optimization of Truck Wheel Rim',
-                desc: 'CFD analysis and thermal optimization modeling for improved heat dissipation.'
+                desc: 'CFD analysis and thermal optimization modeling for improved heat dissipation.',
+                ppt: 'ppt/thermal.pptx',
+                slidesUrl: 'https://docs.google.com/gview?url=https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/ppt/thermal.pptx&embedded=true'
             }
         };
 
-        if (data[name]) {
-            document.getElementById('projectTitle').textContent = data[name].title;
-            document.getElementById('projectDesc').textContent = data[name].desc;
+        const current = data[name];
+
+        if (current) {
+            document.getElementById('projectTitle').textContent = current.title;
+            document.getElementById('projectDesc').textContent = current.desc;
+
+            document.getElementById('viewerWrap').innerHTML = `
+                <div class="ppt-viewer">
+                    <iframe src="${current.slidesUrl}" allowfullscreen></iframe>
+                </div>
+                <div class="actions">
+                    <a class="btn" href="${current.ppt}" download>Download PPT</a>
+                    <a class="btn secondary" href="${current.ppt}" target="_blank" rel="noopener noreferrer">Open PPT File</a>
+                </div>
+            `;
         }
 
         window.addEventListener('load', () => {
