@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devanshu Borase | ARVO</title>
     <style>
         :root {
-            --bg-1: #050816;
+            --bg: #050816;
             --bg-2: #0b1020;
             --bg-3: #111a33;
             --card: rgba(15, 20, 38, 0.8);
@@ -29,7 +28,7 @@
                 radial-gradient(circle at 15% 20%, rgba(0, 210, 255, 0.14), transparent 26%),
                 radial-gradient(circle at 85% 15%, rgba(124, 92, 255, 0.16), transparent 22%),
                 radial-gradient(circle at 80% 80%, rgba(0, 210, 255, 0.10), transparent 24%),
-                linear-gradient(180deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3));
+                linear-gradient(180deg, var(--bg), var(--bg-2) 55%, var(--bg-3));
         }
 
         * {
@@ -58,34 +57,9 @@
             background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
                               linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
             background-size: 60px 60px;
-            opacity: 0.08;
+            opacity: 0.05;
             pointer-events: none;
             z-index: -1;
-        }
-
-        .ambient-light,
-        .ambient-light-2 {
-            position: fixed;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
-            filter: blur(100px);
-        }
-
-        .ambient-light {
-            top: -8%;
-            left: -10%;
-            width: 34vw;
-            height: 34vw;
-            background: rgba(0, 210, 255, 0.16);
-        }
-
-        .ambient-light-2 {
-            right: -12%;
-            bottom: -10%;
-            width: 32vw;
-            height: 32vw;
-            background: rgba(124, 92, 255, 0.16);
         }
 
         nav {
@@ -99,7 +73,7 @@
             background: rgba(5, 8, 22, 0.72);
             backdrop-filter: blur(16px);
             z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--border);
         }
 
         .logo {
@@ -125,7 +99,7 @@
             color: var(--muted);
             text-decoration: none;
             font-weight: 500;
-            transition: 0.3s ease;
+            transition: 0.25s ease;
         }
 
         nav ul li a:hover {
@@ -194,14 +168,6 @@
             overflow: hidden;
         }
 
-        .hero-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(0, 210, 255, 0.12), transparent 40%, rgba(124, 92, 255, 0.10));
-            pointer-events: none;
-        }
-
         .hero-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -210,8 +176,8 @@
         }
 
         .stat {
-            background: rgba(7, 12, 28, 0.7);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
             border-radius: 16px;
             padding: 18px;
         }
@@ -219,7 +185,7 @@
         .stat strong {
             display: block;
             font-size: 24px;
-            color: var(--accent);
+            color: var(--text);
             margin-bottom: 6px;
         }
 
@@ -237,19 +203,20 @@
         .skill-link {
             display: inline-block;
             text-decoration: none;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(0, 210, 255, 0.16);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
             padding: 12px 20px;
             border-radius: 999px;
             font-size: 15px;
             color: var(--text);
-            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
         }
 
         .skill-link:hover {
             transform: translateY(-4px);
             border-color: var(--accent);
-            box-shadow: 0 0 16px rgba(0, 210, 255, 0.18);
+            color: var(--accent);
+            box-shadow: 0 0 16px rgba(0, 210, 255, 0.14);
         }
 
         .work-grid {
@@ -271,27 +238,27 @@
 
         .project-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 28px 70px rgba(0, 210, 255, 0.18);
-            border-color: rgba(0, 210, 255, 0.25);
+            box-shadow: 0 28px 70px rgba(0, 210, 255, 0.12);
+            border-color: rgba(124, 92, 255, 0.25);
         }
 
         .model-viewer {
             width: 100%;
             height: 220px;
-            background:
-                linear-gradient(135deg, rgba(0, 210, 255, 0.14), rgba(124, 92, 255, 0.14)),
-                #111827;
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.16), rgba(124, 92, 255, 0.18));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--muted);
+            color: var(--text);
             text-align: center;
-            padding: 20px;
-            transition: transform 0.35s ease;
+            overflow: hidden;
         }
 
-        .project-card:hover .model-viewer {
-            transform: scale(1.04);
+        .model-viewer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .project-info {
@@ -301,6 +268,7 @@
         .project-info h3 {
             font-size: 20px;
             margin-bottom: 10px;
+            color: var(--text);
         }
 
         .project-info p {
@@ -317,6 +285,7 @@
         .contact-box p {
             font-size: 18px;
             margin-bottom: 14px;
+            color: var(--muted);
         }
 
         .contact-box a {
@@ -330,7 +299,7 @@
             align-items: center;
             gap: 10px;
             margin-top: 6px;
-            color: #0a66c2;
+            color: var(--accent);
             text-decoration: none;
             font-weight: 700;
         }
@@ -369,9 +338,6 @@
     </style>
 </head>
 <body>
-    <div class="ambient-light"></div>
-    <div class="ambient-light-2"></div>
-
     <nav>
         <a href="#home" class="logo">ARVO<span>.</span></a>
         <ul>
@@ -424,7 +390,7 @@
         <h2>Selected Projects</h2>
         <div class="work-grid">
             <a class="project-card" href="project.html?name=bumper">
-                <div class="model-viewer"><img src="thumnail/Screenshot 2026-07-24 173726.png"> </div>
+                <div class="model-viewer"><img src="thumnail/Screenshot 2026-07-24 173726.png" alt="Automotive Front Bumper Fascia thumbnail"></div>
                 <div class="project-info">
                     <h3>Automotive Front Bumper Fascia</h3>
                     <p>Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.</p>
@@ -432,14 +398,14 @@
             </a>
 
             <a class="project-card" href="project.html?name=automotive">
-                <div class="model-viewer"><img src="SURFACE DESIGN/Screenshot 2026-05-02 022658.png"> </div>
+                <div class="model-viewer"><img src="SURFACE DESIGN/Screenshot 2026-05-02 022658.png" alt="Automotive modeling thumbnail"></div>
                 <div class="project-info">
                     <h3>High-Performance Automotive Modeling</h3>
                     <p>Advanced surfacing and 3D geometric modeling for vehicle components and body panels.</p>
                 </div>
             </a>
 
-             <a class="project-card" href="project.html?name=automotive">
+            <a class="project-card" href="project.html?name=automotive">
                 <div class="model-viewer">Click to open project photos</div>
                 <div class="project-info">
                     <h3>High-Performance Automotive Modeling</h3>
@@ -447,7 +413,7 @@
                 </div>
             </a>
 
-             <a class="project-card" href="project.html?name=automotive">
+            <a class="project-card" href="project.html?name=automotive">
                 <div class="model-viewer">Click to open project photos</div>
                 <div class="project-info">
                     <h3>High-Performance Automotive Modeling</h3>
@@ -456,7 +422,7 @@
             </a>
 
             <a class="project-card" href="project.html?name=thermal">
-                <div class="model-viewer"><img src="PROJECT_TRUCK_RIM/Screenshot 2026-05-04 020128.png"></div>
+                <div class="model-viewer"><img src="PROJECT_TRUCK_RIM/Screenshot 2026-05-04 020128.png" alt="Truck wheel rim thumbnail"></div>
                 <div class="project-info">
                     <h3>Thermal Optimization of Truck Wheel Rim</h3>
                     <p>CFD analysis and thermal optimization modeling for improved heat dissipation.</p>
@@ -495,6 +461,9 @@
                 setTimeout(() => window.location.href = this.href, 250);
             });
         });
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
