@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devanshu Borase | ARVO</title>
+    <style>
+        :root {
+            --bg-1: #050816;
+            --bg-2: #0b1020;
+            --bg-3: #111a33;
+            --card: rgba(15, 20, 38, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f7f9ff;
+            --muted: #b0b8d4;
+            --accent: #00d2ff;
+            --accent-2: #7c5cff;
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(0, 210, 255, 0.14), transparent 26%),
+                radial-gradient(circle at 85% 15%, rgba(124, 92, 255, 0.16), transparent 22%),
+                radial-gradient(circle at 80% 80%, rgba(0, 210, 255, 0.10), transparent 24%),
+                linear-gradient(180deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            color: var(--text);
+            line-height: 1.7;
+            opacity: 1;
+            transition: opacity 0.35s ease;
+        }
+
+        body.page-fade-out {
+            opacity: 0;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .ambient-light,
+        .ambient-light-2 {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(100px);
+        }
+
+        .ambient-light {
+            top: -8%;
+            left: -10%;
+            width: 34vw;
+            height: 34vw;
+            background: rgba(0, 210, 255, 0.16);
+        }
+
+        .ambient-light-2 {
+            right: -12%;
+            bottom: -10%;
+            width: 32vw;
+            height: 32vw;
+            background: rgba(124, 92, 255, 0.16);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 18px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 8, 22, 0.72);
+            backdrop-filter: blur(16px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 26px;
+            flex-wrap: wrap;
+        }
+
+        nav ul li a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 120px 48px 72px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            font-size: 38px;
+            margin-bottom: 34px;
+            border-left: 4px solid var(--accent);
+            padding-left: 15px;
+        }
+
+        #home {
+            display: grid;
+            grid-template-columns: 1.3fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        #home h1 {
+            font-size: clamp(42px, 6vw, 70px);
+            line-height: 1.05;
+            margin-bottom: 14px;
+        }
+
+        #home h2.subtitle {
+            font-size: 22px;
+            color: var(--accent);
+            border: none;
+            padding: 0;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        #home p {
+            color: var(--muted);
+            max-width: 680px;
+            font-size: 17px;
+            margin-bottom: 28px;
+        }
+
+        .hero-card,
+        .project-card,
+        .contact-box {
+            background: var(--card);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .hero-card {
+            border-radius: 22px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.12), transparent 40%, rgba(124, 92, 255, 0.10));
+            pointer-events: none;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .stat {
+            background: rgba(7, 12, 28, 0.7);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 24px;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .stat span {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .skill-link {
+            display: inline-block;
+            text-decoration: none;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(0, 210, 255, 0.16);
+            padding: 12px 20px;
+            border-radius: 999px;
+            font-size: 15px;
+            color: var(--text);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .skill-link:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 0 16px rgba(0, 210, 255, 0.18);
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+        }
+
+        .project-card {
+            border-radius: 18px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            transform: translateY(0) scale(1);
+            transition: transform 0.35s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, border-color 0.35s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 28px 70px rgba(0, 210, 255, 0.18);
+            border-color: rgba(0, 210, 255, 0.25);
+        }
+
+        .model-viewer {
+            width: 100%;
+            height: 220px;
+            background:
+                linear-gradient(135deg, rgba(0, 210, 255, 0.14), rgba(124, 92, 255, 0.14)),
+                #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.35s ease;
+        }
+
+        .project-card:hover .model-viewer {
+            transform: scale(1.04);
+        }
+
+        .project-info {
+            padding: 22px;
+        }
+
+        .project-info h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .project-info p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .contact-box {
+            padding: 42px 28px;
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        .contact-box p {
+            font-size: 18px;
+            margin-bottom: 14px;
+        }
+
+        .contact-box a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .linkedin-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+            color: #0a66c2;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .linkedin-link svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 900px) {
+            #home {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 20px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            section {
+                padding: 130px 20px 60px;
+            }
+
+            h2 {
+                font-size: 30px;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-light"></div>
+    <div class="ambient-light-2"></div>
+
+    <nav>
+        <a href="#home" class="logo">ARVO<span>.</span></a>
+        <ul>
+            <li><a href="#home">Profile</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#work">Work</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home">
+        <div>
+            <h1>Devanshu Borase</h1>
+            <h2 class="subtitle">Mechanical Engineering Student | CAD Designer</h2>
+            <p>
+                Final-year Mechanical Engineering student and CAD designer focused on product design, CAD/CAM, manufacturing processes,
+                and advanced surface modeling.
+            </p>
+        </div>
+
+        <div class="hero-card">
+            <h2 style="margin-bottom: 18px;">Profile Snapshot</h2>
+            <div class="hero-stats">
+                <div class="stat"><strong>CAD</strong><span>NX, CATIA, SolidWorks, Creo</span></div>
+                <div class="stat"><strong>DFM</strong><span>Plastic design & tooling</span></div>
+                <div class="stat"><strong>CFD</strong><span>Thermal & flow optimization</span></div>
+                <div class="stat"><strong>3D</strong><span>Scans & reverse engineering</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2>Technical Skills</h2>
+        <div class="skills-grid">
+            <a class="skill-link" href="skill.html?skill=nx">Siemens NX</a>
+            <a class="skill-link" href="skill.html?skill=solidworks">SolidWorks</a>
+            <a class="skill-link" href="skill.html?skill=catia">CATIA</a>
+            <a class="skill-link" href="skill.html?skill=creo">PTC Creo</a>
+            <a class="skill-link" href="skill.html?skill=cfd">CFD Analysis</a>
+            <a class="skill-link" href="skill.html?skill=surface">Surface Modeling</a>
+            <a class="skill-link" href="skill.html?skill=tooling">Tooling Feasibility</a>
+            <a class="skill-link" href="skill.html?skill=cavity">Core & Cavity Extraction</a>
+            <a class="skill-link" href="skill.html?skill=gdt">GD&T</a>
+            <a class="skill-link" href="skill.html?skill=assembly">Assembly Modeling</a>
+        </div>
+    </section>
+
+    <section id="work">
+        <h2>Selected Projects</h2>
+        <div class="work-grid">
+            <a class="project-card" href="project.html?name=parking">
+                <div class="model-viewer">Click to open project photos</div>
+                <div class="project-info">
+                    <h3>Multi-Level Automated Puzzle Parking</h3>
+                    <p>Mechanical design and kinematic layout of an automated multi-level car parking system.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=automotive">
+                <div class="model-viewer">Click to open project photos</div>
+                <div class="project-info">
+                    <h3>High-Performance Automotive Modeling</h3>
+                    <p>Advanced surfacing and 3D geometric modeling for vehicle components and body panels.</p>
+                </div>
+            </a>
+
+            <a class="project-card" href="project.html?name=thermal">
+                <div class="model-viewer">Click to open project photos</div>
+                <div class="project-info">
+                    <h3>Thermal Optimization of Truck Wheel Rim</h3>
+                    <p>CFD analysis and thermal optimization modeling for improved heat dissipation.</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Get In Touch</h2>
+        <div class="contact-box">
+            <p>Ready to collaborate on the next engineering challenge?</p>
+            <p>Email: <a href="mailto:devborase03@gmail.com">devborase03@gmail.com</a></p>
+            <a class="linkedin-link" href="https://www.linkedin.com/in/devanshu-borase" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V24h-4V8zm7 0h3.84v2.19h.05c.54-1.02 1.86-2.19 3.82-2.19C19.32 8 24 9.82 24 16.26V24h-4v-6.84c0-1.63-.03-3.73-2.27-3.73-2.27 0-2.62 1.77-2.62 3.61V24h-4V8z"/>
+                </svg>
+                linkedin.com/in/devanshu-borase
+            </a>
+        </div>
+    </section>
+
+    <script>
+        document.querySelectorAll('a.project-card').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.body.classList.add('page-fade-out');
+                setTimeout(() => window.location.href = this.href, 250);
+            });
+        });
+
+        document.querySelectorAll('.skill-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.body.classList.add('page-fade-out');
+                setTimeout(() => window.location.href = this.href, 250);
+            });
+        });
+    </script>
+</body>
+</html>
