@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Gallery</title>
+    <title>Project Presentation</title>
     <style>
+        :root {
+            --bg: #050816;
+            --bg-2: #0b1020;
+            --card: rgba(15, 20, 38, 0.9);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f7f9ff;
+            --muted: #b0b8d4;
+            --accent: #00d2ff;
+        }
+
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             min-height: 100%;
             overflow-x: hidden;
-            background: linear-gradient(180deg, #050816, #0b1020);
+            background: linear-gradient(180deg, var(--bg), var(--bg-2));
+            font-family: Arial, sans-serif;
+            color: var(--text);
         }
 
         body {
-            font-family: Arial, sans-serif;
-            color: white;
             opacity: 0;
             transition: opacity 0.35s ease;
         }
@@ -26,66 +35,152 @@
             opacity: 1;
         }
 
-        body.fade-out {
-            opacity: 0;
-        }
-
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
         .back {
             display: inline-block;
-            margin-bottom: 24px;
-            color: #00d2ff;
+            margin-bottom: 22px;
+            color: var(--accent);
             text-decoration: none;
             font-weight: bold;
         }
 
         h1 {
-            margin-bottom: 10px;
+            margin: 0 0 10px;
+            font-size: 34px;
         }
 
         p {
-            color: #b0b8d4;
+            color: var(--muted);
+            margin-top: 0;
         }
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 18px;
-            margin-top: 30px;
+        .viewer {
+            margin-top: 28px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
         }
 
-        .photo {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
+        .slide-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
             border-radius: 16px;
             overflow: hidden;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .photo img {
+        .slide-wrap img {
             width: 100%;
-            height: 220px;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: #111;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #00d2ff, #7c5cff);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .counter {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .thumbs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .thumb {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: 0.2s ease;
+            background: #111;
+        }
+
+        .thumb.active,
+        .thumb:hover {
+            opacity: 1;
+            border-color: var(--accent);
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 80px;
             object-fit: cover;
             display: block;
         }
 
-        .photo .caption {
-            padding: 14px;
-            color: #b0b8d4;
+        .thumb span {
+            display: block;
+            padding: 8px;
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <a class="back" href="index.html#work" id="backLink">← Back to Projects</a>
-        <h1 id="projectTitle">Project Gallery</h1>
-        <p id="projectDesc">Select a project to view details.</p>
+        <h1 id="projectTitle">Project Presentation</h1>
+        <p id="projectDesc">Browse the slides below.</p>
 
-        <div id="viewerWrap"></div>
+        <div class="viewer">
+            <div class="slide-wrap">
+                <img id="slideImage" src="" alt="Project slide">
+            </div>
+
+            <div class="controls">
+                <button class="btn" id="prevBtn">Previous</button>
+                <div class="counter" id="slideCounter">Slide 1 / 1</div>
+                <button class="btn" id="nextBtn">Next</button>
+            </div>
+
+            <div class="thumbs" id="thumbs"></div>
+        </div>
     </div>
 
     <script>
@@ -95,25 +190,103 @@
         const data = {
             bumper: {
                 title: 'Automotive Front Bumper Fascia',
-                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.'
+                desc: 'Slide-by-slide presentation for the bumper project.',
+                slides: [
+                    'ppt/bumper/slide1.png',
+                    'ppt/bumper/slide2.png',
+                    'ppt/bumper/slide3.png'
+                ]
             },
             automotive: {
                 title: 'High-Performance Automotive Modeling',
-                desc: 'Advanced surfacing and 3D geometric modeling for vehicle components and body panels.'
+                desc: 'Slide-by-slide presentation for the automotive modeling project.',
+                slides: [
+                    'ppt/automotive/slide1.png',
+                    'ppt/automotive/slide2.png',
+                    'ppt/automotive/slide3.png'
+                ]
             },
             thermal: {
                 title: 'Thermal Optimization of Truck Wheel Rim',
-                desc: 'CFD analysis and thermal optimization modeling for improved heat dissipation.'
+                desc: 'Slide-by-slide presentation for the thermal optimization project.',
+                slides: [
+                    'ppt/thermal/slide1.png',
+                    'ppt/thermal/slide2.png',
+                    'ppt/thermal/slide3.png'
+                ]
             }
         };
 
-        const current = data[name];
+        const current = data[name] || {
+            title: 'Project Presentation',
+            desc: 'Browse the slides below.',
+            slides: []
+        };
 
-        if (current) {
-            document.getElementById('projectTitle').textContent = current.title;
-            document.getElementById('projectDesc').textContent = current.desc;
-            document.getElementById('viewerWrap').innerHTML = '';
+        const projectTitle = document.getElementById('projectTitle');
+        const projectDesc = document.getElementById('projectDesc');
+        const slideImage = document.getElementById('slideImage');
+        const slideCounter = document.getElementById('slideCounter');
+        const thumbs = document.getElementById('thumbs');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        projectTitle.textContent = current.title;
+        projectDesc.textContent = current.desc;
+
+        let index = 0;
+
+        function renderSlide() {
+            if (!current.slides.length) {
+                slideImage.removeAttribute('src');
+                slideImage.alt = 'No slides available';
+                slideCounter.textContent = 'No slides available';
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                thumbs.innerHTML = '<p style="color:#b0b8d4;">Add slide image paths in the array to display the presentation.</p>';
+                return;
+            }
+
+            slideImage.src = current.slides[index];
+            slideImage.alt = `${current.title} slide ${index + 1}`;
+            slideCounter.textContent = `Slide ${index + 1} / ${current.slides.length}`;
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === current.slides.length - 1;
+
+            thumbs.querySelectorAll('.thumb').forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
         }
+
+        thumbs.innerHTML = current.slides.map((src, i) => `
+            <div class="thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
+                <img src="${src}" alt="Thumbnail ${i + 1}">
+                <span>Slide ${i + 1}</span>
+            </div>
+        `).join('');
+
+        thumbs.querySelectorAll('.thumb').forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                index = Number(thumb.dataset.index);
+                renderSlide();
+            });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (index > 0) {
+                index--;
+                renderSlide();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (index < current.slides.length - 1) {
+                index++;
+                renderSlide();
+            }
+        });
+
+        renderSlide();
 
         window.addEventListener('load', () => {
             document.body.classList.add('loaded');
@@ -121,7 +294,7 @@
 
         document.getElementById('backLink').addEventListener('click', function (e) {
             e.preventDefault();
-            document.body.classList.add('fade-out');
+            document.body.style.opacity = '0';
             setTimeout(() => {
                 window.location.href = this.href;
             }, 250);
