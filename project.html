@@ -107,24 +107,23 @@
             bumper: {
                 title: 'Automotive Front Bumper Fascia',
                 desc: 'Presentation for the Front Bumper project.',
-                // FIXED: Replaced all raw spaces in the filename with %20
-                slidesUrl: 'https://view.officeapps.live.com/op/embed.aspx?src=https://devborase.github.io/arvo-portfolio/ppt/ppt/Front%20Bumper%20Design%20Report.pptx'
+                // Fixed: Removed the extra 'ppt/' from this URL
+                slidesUrl: 'https://view.officeapps.live.com/op/embed.aspx?src=https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20Design%20Report.pptx'
             },
             automotive: {
                 title: 'High-Performance Automotive Modeling',
                 desc: 'Presentation for the automotive modeling project.',
-                // NOTE: Make sure you replace "..." here with the exact rest of your file name!
+                // Make sure to replace the "..." with your actual full file name
                 slidesUrl: 'https://view.officeapps.live.com/op/embed.aspx?src=https://devborase.github.io/arvo-portfolio/ppt/Automotive%20...pptx'
             },
             thermal: {
                 title: 'Thermal Optimization of Truck Wheel Rim',
                 desc: 'Presentation for the thermal optimization project.',
-                // NOTE: Make sure you replace "..." here with the exact rest of your file name!
+                // Make sure to replace the "..." with your actual full file name
                 slidesUrl: 'https://view.officeapps.live.com/op/embed.aspx?src=https://devborase.github.io/arvo-portfolio/ppt/Thermal%20...pptx'
             }
         };
 
-        // FIXED: Removed the duplicate "const current" block that was causing a syntax error.
         const current = data[name] || {
             title: 'Project Presentation',
             desc: 'Presentation preview.',
