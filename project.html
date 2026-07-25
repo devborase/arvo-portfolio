@@ -78,13 +78,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            outline: none;
         }
 
-        .slide-wrap img {
+        .slide-wrap iframe {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            border: 0;
             display: block;
             background: #111;
         }
@@ -119,16 +118,9 @@
             border-color: var(--accent);
         }
 
-        .thumb img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            display: block;
-        }
-
         .thumb span {
             display: block;
-            padding: 8px;
+            padding: 12px 8px;
             font-size: 12px;
             color: var(--muted);
             text-align: center;
@@ -143,7 +135,7 @@
 
         <div class="viewer">
             <div class="slide-wrap" id="slideArea" tabindex="0">
-                <img id="slideImage" src="" alt="Project slide">
+                <iframe id="slideFrame" src="" allowfullscreen></iframe>
             </div>
 
             <div class="hint">Use mouse wheel or touchpad scroll over the slide area to move between slides.</div>
@@ -158,29 +150,32 @@
         const data = {
             bumper: {
                 title: 'Automotive Front Bumper Fascia',
-                desc: 'Scroll through the slide-by-slide presentation for the bumper project.',
-                slides: [
-                    'ppt/bumper/slide1.png',
-                    'ppt/bumper/slide2.png',
-                    'ppt/bumper/slide3.png'
+                desc: 'Scroll through the presentation slides for the bumper project.',
+                ppt: 'ppt/Front Bumper  Design Report.pptx',
+                slidesUrl: [
+                    'https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20Design%20Report/slide1.png?raw=true&embedded=true',
+                    'https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20Design%20Report/slide2.png?raw=true&embedded=true',
+                    'https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20Design%20Report/slide3.png?raw=true&embedded=true'
                 ]
             },
             automotive: {
                 title: 'High-Performance Automotive Modeling',
-                desc: 'Scroll through the slide-by-slide presentation for the automotive modeling project.',
-                slides: [
-                    'ppt/automotive/slide1.png',
-                    'ppt/automotive/slide2.png',
-                    'ppt/automotive/slide3.png'
+                desc: 'Scroll through the presentation slides for the automotive modeling project.',
+                ppt: 'Automotive Modeling Report.pptx',
+                slidesUrl: [
+                    'https://devborase.github.io/arvo-portfolio/ppt/Automotive%20Modeling%20Report/slide1.png?raw=true&embedded=true',
+                    'https://devborase.github.io/arvo-portfolio/ppt/Automotive%20Modeling%20Report/slide2.png?raw=true&embedded=true',
+                    'https://devborase.github.io/arvo-portfolio/ppt/Automotive%20Modeling%20Report/slide3.png?raw=true&embedded=true'
                 ]
             },
             thermal: {
                 title: 'Thermal Optimization of Truck Wheel Rim',
-                desc: 'Scroll through the slide-by-slide presentation for the thermal optimization project.',
-                slides: [
-                    'ppt/thermal/slide1.png',
-                    'ppt/thermal/slide2.png',
-                    'ppt/thermal/slide3.png'
+                desc: 'Scroll through the presentation slides for the thermal optimization project.',
+                ppt: 'Thermal Optimization Report.pptx',
+                slidesUrl: [
+                    'https://devborase.github.io/arvo-portfolio/ppt/Thermal%20Optimization%20Report/slide1.png?raw=true&embedded=true',
+                    'https://devborase.github.io/arvo-portfolio/ppt/Thermal%20Optimization%20Report/slide2.png?raw=true&embedded=true',
+                    'https://devborase.github.io/arvo-portfolio/ppt/Thermal%20Optimization%20Report/slide3.png?raw=true&embedded=true'
                 ]
             }
         };
@@ -188,12 +183,13 @@
         const current = data[name] || {
             title: 'Project Presentation',
             desc: 'Scroll on the slide area to change slides.',
-            slides: []
+            ppt: '',
+            slidesUrl: []
         };
 
         const projectTitle = document.getElementById('projectTitle');
         const projectDesc = document.getElementById('projectDesc');
-        const slideImage = document.getElementById('slideImage');
+        const slideFrame = document.getElementById('slideFrame');
         const thumbs = document.getElementById('thumbs');
         const slideArea = document.getElementById('slideArea');
 
@@ -204,24 +200,21 @@
         let wheelLock = false;
 
         function renderSlide() {
-            if (!current.slides.length) {
-                slideImage.removeAttribute('src');
-                slideImage.alt = 'No slides available';
-                thumbs.innerHTML = '<p style="color:#b0b8d4;">Add slide image paths in the array to display the presentation.</p>';
+            if (!current.slidesUrl.length) {
+                slideFrame.removeAttribute('src');
+                thumbs.innerHTML = '<p style="color:#b0b8d4;">Add slide URLs in the data object to display the presentation.</p>';
                 return;
             }
 
-            slideImage.src = current.slides[index];
-            slideImage.alt = `${current.title} slide ${index + 1}`;
+            slideFrame.src = current.slidesUrl[index];
 
             thumbs.querySelectorAll('.thumb').forEach((el, i) => {
                 el.classList.toggle('active', i === index);
             });
         }
 
-        thumbs.innerHTML = current.slides.map((src, i) => `
+        thumbs.innerHTML = current.slidesUrl.map((src, i) => `
             <div class="thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
-                <img src="${src}" alt="Thumbnail ${i + 1}">
                 <span>Slide ${i + 1}</span>
             </div>
         `).join('');
@@ -235,11 +228,11 @@
 
         slideArea.addEventListener('wheel', (e) => {
             e.preventDefault();
-            if (wheelLock || !current.slides.length) return;
+            if (wheelLock || !current.slidesUrl.length) return;
 
             wheelLock = true;
 
-            if (e.deltaY > 0 && index < current.slides.length - 1) {
+            if (e.deltaY > 0 && index < current.slidesUrl.length - 1) {
                 index++;
                 renderSlide();
             } else if (e.deltaY < 0 && index > 0) {
