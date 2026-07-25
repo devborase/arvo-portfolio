@@ -78,6 +78,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            outline: none;
         }
 
         .slide-wrap img {
@@ -88,39 +89,11 @@
             background: #111;
         }
 
-        .controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #00d2ff, #7c5cff);
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .counter {
+        .hint {
+            margin-top: 14px;
             color: var(--muted);
-            font-size: 15px;
+            font-size: 14px;
+            text-align: center;
         }
 
         .thumbs {
@@ -166,19 +139,14 @@
     <div class="container">
         <a class="back" href="index.html#work" id="backLink">← Back to Projects</a>
         <h1 id="projectTitle">Project Presentation</h1>
-        <p id="projectDesc">Browse the slides below.</p>
+        <p id="projectDesc">Scroll on the slide area to change slides.</p>
 
         <div class="viewer">
-            <div class="slide-wrap">
+            <div class="slide-wrap" id="slideArea" tabindex="0">
                 <img id="slideImage" src="" alt="Project slide">
             </div>
 
-            <div class="controls">
-                <button class="btn" id="prevBtn">Previous</button>
-                <div class="counter" id="slideCounter">Slide 1 / 1</div>
-                <button class="btn" id="nextBtn">Next</button>
-            </div>
-
+            <div class="hint">Use mouse wheel or touchpad scroll over the slide area to move between slides.</div>
             <div class="thumbs" id="thumbs"></div>
         </div>
     </div>
@@ -190,7 +158,7 @@
         const data = {
             bumper: {
                 title: 'Automotive Front Bumper Fascia',
-                desc: 'Slide-by-slide presentation for the bumper project.',
+                desc: 'Scroll through the slide-by-slide presentation for the bumper project.',
                 slides: [
                     'ppt/bumper/slide1.png',
                     'ppt/bumper/slide2.png',
@@ -199,7 +167,7 @@
             },
             automotive: {
                 title: 'High-Performance Automotive Modeling',
-                desc: 'Slide-by-slide presentation for the automotive modeling project.',
+                desc: 'Scroll through the slide-by-slide presentation for the automotive modeling project.',
                 slides: [
                     'ppt/automotive/slide1.png',
                     'ppt/automotive/slide2.png',
@@ -208,7 +176,7 @@
             },
             thermal: {
                 title: 'Thermal Optimization of Truck Wheel Rim',
-                desc: 'Slide-by-slide presentation for the thermal optimization project.',
+                desc: 'Scroll through the slide-by-slide presentation for the thermal optimization project.',
                 slides: [
                     'ppt/thermal/slide1.png',
                     'ppt/thermal/slide2.png',
@@ -219,39 +187,32 @@
 
         const current = data[name] || {
             title: 'Project Presentation',
-            desc: 'Browse the slides below.',
+            desc: 'Scroll on the slide area to change slides.',
             slides: []
         };
 
         const projectTitle = document.getElementById('projectTitle');
         const projectDesc = document.getElementById('projectDesc');
         const slideImage = document.getElementById('slideImage');
-        const slideCounter = document.getElementById('slideCounter');
         const thumbs = document.getElementById('thumbs');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
+        const slideArea = document.getElementById('slideArea');
 
         projectTitle.textContent = current.title;
         projectDesc.textContent = current.desc;
 
         let index = 0;
+        let wheelLock = false;
 
         function renderSlide() {
             if (!current.slides.length) {
                 slideImage.removeAttribute('src');
                 slideImage.alt = 'No slides available';
-                slideCounter.textContent = 'No slides available';
-                prevBtn.disabled = true;
-                nextBtn.disabled = true;
                 thumbs.innerHTML = '<p style="color:#b0b8d4;">Add slide image paths in the array to display the presentation.</p>';
                 return;
             }
 
             slideImage.src = current.slides[index];
             slideImage.alt = `${current.title} slide ${index + 1}`;
-            slideCounter.textContent = `Slide ${index + 1} / ${current.slides.length}`;
-            prevBtn.disabled = index === 0;
-            nextBtn.disabled = index === current.slides.length - 1;
 
             thumbs.querySelectorAll('.thumb').forEach((el, i) => {
                 el.classList.toggle('active', i === index);
@@ -272,19 +233,24 @@
             });
         });
 
-        prevBtn.addEventListener('click', () => {
-            if (index > 0) {
+        slideArea.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (wheelLock || !current.slides.length) return;
+
+            wheelLock = true;
+
+            if (e.deltaY > 0 && index < current.slides.length - 1) {
+                index++;
+                renderSlide();
+            } else if (e.deltaY < 0 && index > 0) {
                 index--;
                 renderSlide();
             }
-        });
 
-        nextBtn.addEventListener('click', () => {
-            if (index < current.slides.length - 1) {
-                index++;
-                renderSlide();
-            }
-        });
+            setTimeout(() => {
+                wheelLock = false;
+            }, 350);
+        }, { passive: false });
 
         renderSlide();
 
