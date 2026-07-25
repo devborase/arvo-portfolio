@@ -75,9 +75,6 @@
             border-radius: 16px;
             overflow: hidden;
             background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .slide-wrap iframe {
@@ -87,59 +84,18 @@
             display: block;
             background: #111;
         }
-
-        .hint {
-            margin-top: 14px;
-            color: var(--muted);
-            font-size: 14px;
-            text-align: center;
-        }
-
-        .thumbs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 12px;
-            margin-top: 18px;
-        }
-
-        .thumb {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: 0.2s ease;
-            background: #111;
-        }
-
-        .thumb.active,
-        .thumb:hover {
-            opacity: 1;
-            border-color: var(--accent);
-        }
-
-        .thumb span {
-            display: block;
-            padding: 12px 8px;
-            font-size: 12px;
-            color: var(--muted);
-            text-align: center;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <a class="back" href="index.html#work" id="backLink">← Back to Projects</a>
         <h1 id="projectTitle">Project Presentation</h1>
-        <p id="projectDesc">Scroll on the slide area to change slides.</p>
+        <p id="projectDesc">Presentation preview.</p>
 
         <div class="viewer">
-            <div class="slide-wrap" id="slideArea" tabindex="0">
+            <div class="slide-wrap">
                 <iframe id="slideFrame" src="" allowfullscreen></iframe>
             </div>
-
-            <div class="hint">Use mouse wheel or touchpad scroll over the slide area to move between slides.</div>
-            <div class="thumbs" id="thumbs"></div>
         </div>
     </div>
 
@@ -150,102 +106,30 @@
         const data = {
             bumper: {
                 title: 'Automotive Front Bumper Fascia',
-                desc: 'Scroll through the presentation slides for the bumper project.',
-                ppt: 'ppt/Front Bumper  Design Report.pptx',
-                slidesUrl: [
-                    'https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20Design%20Report/slide1.png?raw=true&embedded=true',
-                    'https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20Design%20Report/slide2.png?raw=true&embedded=true',
-                    'https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20Design%20Report/slide3.png?raw=true&embedded=true'
-                ]
+                desc: 'Presentation for the bumper project.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20Design%20Report.pptx&embedded=true'
             },
             automotive: {
                 title: 'High-Performance Automotive Modeling',
-                desc: 'Scroll through the presentation slides for the automotive modeling project.',
-                ppt: 'Automotive Modeling Report.pptx',
-                slidesUrl: [
-                    'https://devborase.github.io/arvo-portfolio/ppt/Automotive%20Modeling%20Report/slide1.png?raw=true&embedded=true',
-                    'https://devborase.github.io/arvo-portfolio/ppt/Automotive%20Modeling%20Report/slide2.png?raw=true&embedded=true',
-                    'https://devborase.github.io/arvo-portfolio/ppt/Automotive%20Modeling%20Report/slide3.png?raw=true&embedded=true'
-                ]
+                desc: 'Presentation for the automotive modeling project.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Automotive%20Modeling%20Report.pptx&embedded=true'
             },
             thermal: {
                 title: 'Thermal Optimization of Truck Wheel Rim',
-                desc: 'Scroll through the presentation slides for the thermal optimization project.',
-                ppt: 'Thermal Optimization Report.pptx',
-                slidesUrl: [
-                    'https://devborase.github.io/arvo-portfolio/ppt/Thermal%20Optimization%20Report/slide1.png?raw=true&embedded=true',
-                    'https://devborase.github.io/arvo-portfolio/ppt/Thermal%20Optimization%20Report/slide2.png?raw=true&embedded=true',
-                    'https://devborase.github.io/arvo-portfolio/ppt/Thermal%20Optimization%20Report/slide3.png?raw=true&embedded=true'
-                ]
+                desc: 'Presentation for the thermal optimization project.',
+                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Thermal%20Optimization%20Report.pptx&embedded=true'
             }
         };
 
         const current = data[name] || {
             title: 'Project Presentation',
-            desc: 'Scroll on the slide area to change slides.',
-            ppt: '',
-            slidesUrl: []
+            desc: 'Presentation preview.',
+            slidesUrl: ''
         };
 
-        const projectTitle = document.getElementById('projectTitle');
-        const projectDesc = document.getElementById('projectDesc');
-        const slideFrame = document.getElementById('slideFrame');
-        const thumbs = document.getElementById('thumbs');
-        const slideArea = document.getElementById('slideArea');
-
-        projectTitle.textContent = current.title;
-        projectDesc.textContent = current.desc;
-
-        let index = 0;
-        let wheelLock = false;
-
-        function renderSlide() {
-            if (!current.slidesUrl.length) {
-                slideFrame.removeAttribute('src');
-                thumbs.innerHTML = '<p style="color:#b0b8d4;">Add slide URLs in the data object to display the presentation.</p>';
-                return;
-            }
-
-            slideFrame.src = current.slidesUrl[index];
-
-            thumbs.querySelectorAll('.thumb').forEach((el, i) => {
-                el.classList.toggle('active', i === index);
-            });
-        }
-
-        thumbs.innerHTML = current.slidesUrl.map((src, i) => `
-            <div class="thumb ${i === 0 ? 'active' : ''}" data-index="${i}">
-                <span>Slide ${i + 1}</span>
-            </div>
-        `).join('');
-
-        thumbs.querySelectorAll('.thumb').forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                index = Number(thumb.dataset.index);
-                renderSlide();
-            });
-        });
-
-        slideArea.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            if (wheelLock || !current.slidesUrl.length) return;
-
-            wheelLock = true;
-
-            if (e.deltaY > 0 && index < current.slidesUrl.length - 1) {
-                index++;
-                renderSlide();
-            } else if (e.deltaY < 0 && index > 0) {
-                index--;
-                renderSlide();
-            }
-
-            setTimeout(() => {
-                wheelLock = false;
-            }, 350);
-        }, { passive: false });
-
-        renderSlide();
+        document.getElementById('projectTitle').textContent = current.title;
+        document.getElementById('projectDesc').textContent = current.desc;
+        document.getElementById('slideFrame').src = current.slidesUrl;
 
         window.addEventListener('load', () => {
             document.body.classList.add('loaded');
