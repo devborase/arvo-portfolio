@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Gallery</title>
     <style>
         html, body {
@@ -76,43 +77,16 @@
             padding: 14px;
             color: #b0b8d4;
         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="index.html#work" id="backLink">← Back to Projects</a>
+        <h1 id="projectTitle">Project Gallery</h1>
+        <p id="projectDesc">Select a project to view details.</p>
 
-        .ppt-viewer {
-            margin-top: 28px;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.06);
-        }
-
-        .ppt-viewer iframe {
-            width: 100%;
-            height: min(75vh, 800px);
-            border: 0;
-            display: block;
-        }
-
-        .actions {
-            margin-top: 16px;
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 18px;
-            border-radius: 999px;
-            text-decoration: none;
-            font-weight: 700;
-            color: white;
-            background: #00d2ff;
-        }
-
-        .btn.secondary {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-        }
+        <div id="viewerWrap"></div>
+    </div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
@@ -121,21 +95,15 @@
         const data = {
             bumper: {
                 title: 'Automotive Front Bumper Fascia',
-                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.',
-                ppt: 'ppt/Front Bumper  Design Report.pptx',
-                slidesUrl: 'https://docs.google.com/gview?url=https://devborase.github.io/arvo-portfolio/ppt/Front%20Bumper%20%20Design%20Report.pptx&embedded=true'
+                desc: 'Complete plastic component design from Class-A surfaces to a closed volume with defined clearance lines.'
             },
             automotive: {
                 title: 'High-Performance Automotive Modeling',
-                desc: 'Advanced surfacing and 3D geometric modeling for vehicle components and body panels.',
-                ppt: 'ppt/automotive.pptx',
-                slidesUrl: 'https://docs.google.com/gview?url=https://.github.io/YOUR_REPO_NAME/ppt/automotive.pptx&embedded=true'
+                desc: 'Advanced surfacing and 3D geometric modeling for vehicle components and body panels.'
             },
             thermal: {
                 title: 'Thermal Optimization of Truck Wheel Rim',
-                desc: 'CFD analysis and thermal optimization modeling for improved heat dissipation.',
-                ppt: 'ppt/thermal.pptx',
-                slidesUrl: 'https://docs.google.com/gview?url=https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/ppt/thermal.pptx&embedded=true'
+                desc: 'CFD analysis and thermal optimization modeling for improved heat dissipation.'
             }
         };
 
@@ -144,16 +112,7 @@
         if (current) {
             document.getElementById('projectTitle').textContent = current.title;
             document.getElementById('projectDesc').textContent = current.desc;
-
-            document.getElementById('viewerWrap').innerHTML = `
-                <div class="ppt-viewer">
-                    <iframe src="${current.slidesUrl}" allowfullscreen></iframe>
-                </div>
-                <div class="actions">
-                    <a class="btn" href="${current.ppt}" download>Download PPT</a>
-                    <a class="btn secondary" href="${current.ppt}" target="_blank" rel="noopener noreferrer">Open PPT File</a>
-                </div>
-            `;
+            document.getElementById('viewerWrap').innerHTML = '';
         }
 
         window.addEventListener('load', () => {
