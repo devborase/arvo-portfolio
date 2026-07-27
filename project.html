@@ -176,12 +176,7 @@
         function renderProject() {
             const params = new URLSearchParams(window.location.search);
             const name = params.get('name');
-
-            const current = data[name] || {
-                title: 'Project Presentation',
-                desc: 'Presentation preview.',
-                slidesUrl: ''
-            };
+            const current = data[name] || { title: 'Project Presentation', desc: 'Presentation preview.', slidesUrl: '' };
 
             document.getElementById('projectTitle').textContent = current.title;
             document.getElementById('projectDesc').textContent = current.desc;
@@ -191,6 +186,7 @@
         window.addEventListener('load', () => {
             renderProject();
             document.body.classList.add('loaded');
+            history.replaceState({ page: 'project' }, '', window.location.href);
         });
 
         window.addEventListener('popstate', () => {
@@ -200,7 +196,7 @@
 
         document.getElementById('backLink').addEventListener('click', function (e) {
             e.preventDefault();
-            window.location.href = this.href;
+            history.back();
         });
     </script>
 </body>
