@@ -84,14 +84,11 @@
     </div>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const skill = params.get('skill');
-
         const data = {
             nx: {
                 title: 'Siemens NX',
                 desc: 'Gallery for Siemens NX design files and photos.',
-                images: ['SURFACE DESIGN/Screenshot 2026-04-05 232237.png',  'SURFACE DESIGN/view.prt.png','SURFACE DESIGN/Screenshot 2026-03-14 010046.png', 'SURFACE DESIGN/Screenshot 2026-03-26 015744.png', 'SURFACE DESIGN/Screenshot 2026-03-20 150544.png', 'SURFACE DESIGN/Screenshot 2026-03-26 015717.png', 'SURFACE DESIGN/Screenshot 2026-03-20 164932.png']
+                images: ['SURFACE DESIGN/Screenshot 2026-04-05 232237.png', 'SURFACE DESIGN/view.prt.png', 'SURFACE DESIGN/Screenshot 2026-03-14 010046.png', 'SURFACE DESIGN/Screenshot 2026-03-26 015744.png', 'SURFACE DESIGN/Screenshot 2026-03-20 150544.png', 'SURFACE DESIGN/Screenshot 2026-03-26 015717.png', 'SURFACE DESIGN/Screenshot 2026-03-20 164932.png']
             },
             solidworks: {
                 title: 'SolidWorks',
@@ -145,24 +142,35 @@
             }
         };
 
-        const current = data[skill] || {
-            title: 'Skill Gallery',
-            desc: 'Photos and files related to this skill.',
-            images: []
-        };
+        function renderSkill() {
+            const params = new URLSearchParams(window.location.search);
+            const skill = params.get('skill');
 
-        document.getElementById('skillTitle').textContent = current.title;
-        document.getElementById('skillDesc').textContent = current.desc;
+            const current = data[skill] || {
+                title: 'Skill Gallery',
+                desc: 'Photos and files related to this skill.',
+                images: []
+            };
 
-        const gallery = document.getElementById('gallery');
-        gallery.innerHTML = current.images.map((src, i) => `
-            <div class="photo">
-                <img src="${src}" alt="${current.title} ${i + 1}">
-                <div class="caption">${current.title} photo ${i + 1}</div>
-            </div>
-        `).join('');
+            document.getElementById('skillTitle').textContent = current.title;
+            document.getElementById('skillDesc').textContent = current.desc;
+
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = current.images.map((src, i) => `
+                <div class="photo">
+                    <img src="${src}" alt="${current.title} ${i + 1}">
+                    <div class="caption">${current.title} photo ${i + 1}</div>
+                </div>
+            `).join('');
+        }
 
         window.addEventListener('load', () => {
+            renderSkill();
+            document.body.classList.add('loaded');
+        });
+
+        window.addEventListener('popstate', () => {
+            renderSkill();
             document.body.classList.add('loaded');
         });
 
