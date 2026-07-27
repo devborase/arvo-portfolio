@@ -37,6 +37,10 @@
             color: #00d2ff;
             text-decoration: none;
             font-weight: bold;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 16px;
+            border-radius: 999px;
         }
 
         h1 {
@@ -164,17 +168,29 @@
             `).join('');
         }
 
+        function goBack() {
+            document.body.classList.remove('loaded');
+            setTimeout(() => {
+                window.location.href = 'index.html#skills';
+            }, 250);
+        }
+
         window.addEventListener('load', () => {
             renderSkill();
             document.body.classList.add('loaded');
+
+            if (!history.state || !history.state.skillPage) {
+                history.replaceState({ skillPage: true }, '');
+            }
+        });
+
+        window.addEventListener('popstate', () => {
+            goBack();
         });
 
         document.getElementById('backLink').addEventListener('click', function (e) {
             e.preventDefault();
-            document.body.classList.remove('loaded');
-            setTimeout(() => {
-                window.location.href = this.href;
-            }, 250);
+            goBack();
         });
     </script>
 </body>
