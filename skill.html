@@ -168,10 +168,7 @@
 
         document.getElementById('backLink').addEventListener('click', function (e) {
             e.preventDefault();
-            document.body.style.opacity = '0';
-            setTimeout(() => {
-                window.location.href = this.href;
-            }, 250);
+            window.location.href = this.href;
         });
     </script>
 </body>
