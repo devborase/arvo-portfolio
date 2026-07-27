@@ -186,22 +186,18 @@
         window.addEventListener('load', () => {
             renderProject();
             document.body.classList.add('loaded');
-            history.replaceState({ page: 'project' }, '', window.location.href);
-        });
-
-        window.addEventListener('popstate', () => {
-            renderProject();
-            document.body.classList.add('loaded');
         });
 
         document.getElementById('backLink').addEventListener('click', function (e) {
             e.preventDefault();
-            history.back();
+            document.body.classList.remove('loaded');
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 250);
         });
     </script>
 </body>
 </html>
-
     </script>
 </body>
 </html>
