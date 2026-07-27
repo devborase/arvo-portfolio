@@ -169,14 +169,12 @@
             document.body.classList.add('loaded');
         });
 
-        window.addEventListener('popstate', () => {
-            renderSkill();
-            document.body.classList.add('loaded');
-        });
-
         document.getElementById('backLink').addEventListener('click', function (e) {
             e.preventDefault();
-            window.location.href = this.href;
+            document.body.classList.remove('loaded');
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 250);
         });
     </script>
 </body>
